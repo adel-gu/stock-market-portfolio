@@ -2,12 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import mongoose from 'mongoose';
+import stockRouter from './routes/stock.router';
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-const PORT = process.env.DB_CONNECTION_STRING_URI || 7000;
+const PORT = process.env.PORT || 7000;
 const NODE_ENV = process.env.NODE_NEV;
 const DB_CONNECTION_URI =
   NODE_ENV === 'prod'
@@ -22,6 +23,8 @@ const connectToDataBase = async () => {
     console.log('Error 💥: ', error);
   }
 };
+
+app.use('/api/v1/stocks', stockRouter);
 
 app.listen(PORT, () => {
   connectToDataBase();
