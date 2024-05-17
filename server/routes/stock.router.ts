@@ -2,6 +2,6 @@ import express from 'express';
 
 const router = express.Router();
 
-router.route('/', stockController.getStocks);
+router.route('/').get(stockController.getStocks);
 
 export default router;
