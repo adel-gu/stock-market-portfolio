@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import useGetStocks from '../api/stocks.api';
 import StockCard from '../components/StockCard';
+import Pagination from '../components/Pagination';
 
 const Home = () => {
   const [query, setQuery] = useState<string>('');
   const [searchInput, setSearchInput] = useState<string>('');
-  const stocks = useGetStocks(query);
+  const [page, setPage] = useState<number>(1);
+  const data = useGetStocks(query, page);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -19,6 +21,11 @@ const Home = () => {
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(event.target.value);
+  };
+
+  const handlePageChange = (page: number) => {
+    console.log('PAGE: ', page);
+    setPage(page);
   };
 
   return (
@@ -36,9 +43,16 @@ const Home = () => {
         />
       </div>
       <div className="w-full grid gap-5">
-        {stocks &&
-          stocks.map((stock) => <StockCard key={stock._id} stock={stock} />)}
+        {data?.stocks &&
+          data.stocks.map((stock) => (
+            <StockCard key={stock._id} stock={stock} />
+          ))}
       </div>
+      <Pagination
+        page={page}
+        pages={data?.pages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };
