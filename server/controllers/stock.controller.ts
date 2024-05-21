@@ -16,7 +16,14 @@ const getStocks = async (req: Request, res: Response) => {
       ? (req.query.sort as string).split(',').join('')
       : 'initial_price';
 
-    const query = Stock.find(queryObj).skip(skip).limit(limit).sort(sort);
+    const queryStrRegex = queryObj.company
+      ? RegExp(queryObj.company as string, 'i')
+      : '';
+
+    const query = Stock.find({ company: { $regex: queryStrRegex } })
+      .skip(skip)
+      .limit(limit)
+      .sort(sort);
     const total = await Stock.countDocuments();
     const pages = Math.ceil(total / limit);
 
