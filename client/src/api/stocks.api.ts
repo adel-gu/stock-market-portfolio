@@ -19,9 +19,9 @@ interface IResponse {
 
 const API_BASE_URL = 'http://localhost:5050/api/v1/' + 'stocks';
 
-const useGetStocks = (): IStock[] | undefined => {
+const useGetStocks = (query: string): IStock[] | undefined => {
   const getStocksRequest = async (): Promise<IResponse> => {
-    const response = await fetch(API_BASE_URL);
+    const response = await fetch(`${API_BASE_URL}/?company=${query}`);
 
     if (!response.ok) throw new Error('Error fetching all stocks');
 
@@ -29,7 +29,7 @@ const useGetStocks = (): IStock[] | undefined => {
   };
 
   const { data } = useQuery({
-    queryKey: ['getAllStocks'],
+    queryKey: ['getAllStocks', query],
     queryFn: () => getStocksRequest(),
   });
 
