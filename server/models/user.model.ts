@@ -34,6 +34,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     type: String,
     required: [true, 'Password field is required'],
     minlength: 8,
+    select: false,
   },
   passwordConfirm: {
     type: String,

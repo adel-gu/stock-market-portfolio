@@ -32,7 +32,7 @@ const signup = async (req: Request, res: Response) => {
     const token = signToken(user.id);
     setAuthCookie(res, token);
 
-    res.status(200).json({ status: 'success', data: user });
+    res.status(200).json({ status: 'success' });
   } catch (error) {
     console.log('Error 💥: ', error);
     res.status(500).json({ message: error });
@@ -42,7 +42,7 @@ const signup = async (req: Request, res: Response) => {
 const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select('password');
 
     // check user credentials
     if (!user || !(await user.verifyPassword(password, user.password)))
@@ -54,7 +54,7 @@ const login = async (req: Request, res: Response) => {
     const token = signToken(user.id);
     setAuthCookie(res, token);
 
-    res.status(200).json({ status: 'success', data: user });
+    res.status(200).json({ status: 'success' });
   } catch (error) {
     console.log('Error 💥: ', error);
     res.status(500).json({ message: error });
