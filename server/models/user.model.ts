@@ -16,6 +16,7 @@ interface IUserMethods {
     password: string,
     hashedPassword: string,
   ) => Promise<boolean>;
+  checkPasswordChangeAfter: (tokenTimestamp: number) => boolean;
 }
 
 type UserModel = Model<IUser, {}, IUserMethods>;
@@ -64,6 +65,16 @@ userSchema.method(
     hashedPassword: string,
   ): Promise<boolean> {
     return await bcrypt.compare(password, hashedPassword);
+  },
+);
+
+userSchema.method(
+  'checkPasswordChangeAfter',
+  function checkPasswordChangeAfter(tokenTimestamp: number): boolean {
+    return (
+      !!this.passwordChangedAt &&
+      this.passwordChangedAt > new Date(tokenTimestamp)
+    );
   },
 );
 
