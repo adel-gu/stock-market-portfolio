@@ -1,7 +1,8 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { useSignUpUser } from '../api/auth.api';
 
-type SignUpInputsType = {
+export type SignUpInputsType = {
   name: string;
   email: string;
   password: string;
@@ -16,7 +17,11 @@ const SignUp = () => {
     formState: { errors },
   } = useForm<SignUpInputsType>();
 
-  const onSubmit: SubmitHandler<SignUpInputsType> = (data) => {};
+  const { isPending, signUpUser } = useSignUpUser();
+
+  const onSubmit: SubmitHandler<SignUpInputsType> = (data) => {
+    signUpUser(data);
+  };
 
   return (
     <div className="mt-12">
@@ -88,6 +93,7 @@ const SignUp = () => {
             <button
               type="submit"
               className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl"
+              disabled={isPending}
             >
               Create an account
             </button>
