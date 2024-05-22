@@ -1,12 +1,15 @@
 import express from 'express';
-import cors from 'cors';
-import 'dotenv/config';
 import mongoose from 'mongoose';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import 'dotenv/config';
 import stockRouter from './routes/stock.router';
 import userRouter from './routes/user.router';
 
 const app = express();
+app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 const PORT = process.env.PORT || 7000;
