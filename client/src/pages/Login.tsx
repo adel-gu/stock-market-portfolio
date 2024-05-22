@@ -12,7 +12,6 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<LoginInputsType>();
 
@@ -69,7 +68,7 @@ const Login = () => {
             <span className="text-sm">
               Don't have an account?{' '}
               <Link
-                to="/sign-up"
+                to="/auth/sign-up"
                 className="text-blue-600 hover:text-blue-500 underline"
               >
                 Register here
