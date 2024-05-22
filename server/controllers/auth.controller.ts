@@ -89,8 +89,29 @@ const protect = async (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
+const getLoggedUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user)
+      return res.status(401).json({
+        status: 'fail',
+        message: 'User is logged out, please login again.',
+      });
+
+    res.status(200).json({ status: 'success', data: user });
+  } catch (error) {
+    console.log('Error: ', error);
+    res.status(500).json({ status: 'fail', error: error });
+  }
+};
+
 export default {
   signup,
   login,
   protect,
+  getLoggedUser,
 };
