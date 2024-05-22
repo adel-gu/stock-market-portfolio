@@ -3,6 +3,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import mongoose from 'mongoose';
 import stockRouter from './routes/stock.router';
+import userRouter from './routes/user.router';
 
 const app = express();
 app.use(express.json());
@@ -25,6 +26,7 @@ const connectToDataBase = async () => {
 };
 
 app.use('/api/v1/stocks', stockRouter);
+app.use('/api/v1/users', userRouter);
 
 app.listen(PORT, () => {
   connectToDataBase();
