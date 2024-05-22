@@ -5,6 +5,8 @@ import Home from './pages/Home';
 import AppLayout from './layouts/AppLayout';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
+import AuthContextProvider from './context/AuthContext';
+import AuthLayout from './layouts/AuthLayout';
 
 const router = createBrowserRouter([
   {
@@ -12,15 +14,21 @@ const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       {
-        path: '',
+        index: true,
         element: <Home />,
       },
+    ],
+  },
+  {
+    path: '/auth',
+    element: <AuthLayout />,
+    children: [
       {
-        path: '/sign-up',
+        path: 'sign-up',
         element: <SignUp />,
       },
       {
-        path: '/login',
+        path: 'login',
         element: <Login />,
       },
     ],
@@ -38,7 +46,9 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />;
+      <AuthContextProvider>
+        <RouterProvider router={router} />;
+      </AuthContextProvider>
     </QueryClientProvider>
   );
 }

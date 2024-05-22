@@ -24,7 +24,6 @@ const Home = () => {
   };
 
   const handlePageChange = (page: number) => {
-    console.log('PAGE: ', page);
     setPage(page);
   };
 
