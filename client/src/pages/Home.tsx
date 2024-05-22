@@ -24,7 +24,6 @@ const Home = () => {
   };
 
   const handlePageChange = (page: number) => {
-    console.log('PAGE: ', page);
     setPage(page);
   };
 
@@ -36,7 +35,6 @@ const Home = () => {
       <div className="ml-auto w-1/3 mt-12">
         <input
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="username"
           type="text"
           placeholder="Search by company name..."
           onChange={handleOnChange}
