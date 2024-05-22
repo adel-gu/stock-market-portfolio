@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Home from './pages/Home';
 import AppLayout from './layouts/AppLayout';
 import SignUp from './pages/SignUp';
+import Login from './pages/Login';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: '/sign-up',
         element: <SignUp />,
+      },
+      {
+        path: '/login',
+        element: <Login />,
       },
     ],
   },
