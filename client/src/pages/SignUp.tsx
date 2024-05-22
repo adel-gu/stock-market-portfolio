@@ -100,7 +100,7 @@ const SignUp = () => {
             <span className="text-sm">
               Already has an account?{' '}
               <Link
-                to="/login"
+                to="/auth/login"
                 className="text-blue-600 hover:text-blue-500 underline"
               >
                 login here

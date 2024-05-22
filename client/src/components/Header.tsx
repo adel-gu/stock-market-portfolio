@@ -14,9 +14,12 @@ const Header = () => {
             </Link>
           </div>
           {/* Desktop */}
-          <button className="bg-white text-blue-600 font-bold py-2 px-5 rounded-md">
+          <Link
+            className="bg-white text-blue-600 font-bold py-2 px-5 rounded-md"
+            to="/auth/login"
+          >
             Log In
-          </button>
+          </Link>
         </div>
       </div>
     </div>
