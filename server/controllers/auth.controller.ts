@@ -1,6 +1,14 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.model';
+
+declare global {
+  namespace Express {
+    interface Request {
+      userId: string;
+    }
+  }
+}
 
 const signToken = (id: string): string => {
   return jwt.sign({ id }, process.env.JWT_SECRET_KEY as string, {
@@ -53,7 +61,36 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
+const protect = async (req: Request, res: Response, next: NextFunction) => {
+  // 1. get token
+  const token = req.cookies['auth_token'];
+
+  if (!token)
+    return res
+      .status(401)
+      .json({ status: 'fail', message: 'Access denied please login' });
+
+  // 2. verify token
+  const decode = jwt.verify(
+    token,
+    process.env.JWT_SECRET_KEY as string,
+  ) as jwt.JwtPayload;
+
+  const user = await User.findById(decode.id);
+
+  // 3. verify if token is issued after the user changed password
+  if (!user || (decode.iat && user.checkPasswordChangeAfter(decode.iat)))
+    return res
+      .status(401)
+      .json({ status: 'fail', message: 'Access denied please login' });
+
+  // 4. set req.userId
+  req.userId = user._id.toString();
+  next();
+};
+
 export default {
   signup,
   login,
+  protect,
 };
