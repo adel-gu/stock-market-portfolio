@@ -11,9 +11,16 @@ interface IUser {
   passwordChangedAt?: Date;
 }
 
-type UserModel = Model<IUser>;
+interface IUserMethods {
+  verifyPassword: (
+    password: string,
+    hashedPassword: string,
+  ) => Promise<boolean>;
+}
 
-const userSchema = new mongoose.Schema<IUser, UserModel>({
+type UserModel = Model<IUser, {}, IUserMethods>;
+
+const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
   name: { type: String, required: [true, 'Please tell us your name'] },
   email: {
     type: String,
@@ -48,6 +55,17 @@ userSchema.pre('save', async function (next) {
   this.passwordConfirm = undefined;
   next();
 });
+
+// check user credentials
+userSchema.method(
+  'verifyPassword',
+  async function verifyPassword(
+    password: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    return await bcrypt.compare(password, hashedPassword);
+  },
+);
 
 const User = mongoose.model('User', userSchema);
 export default User;
