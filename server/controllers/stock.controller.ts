@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Stock from '../models/stock.model';
+import WatchList from '../models/watchlist.model';
 
 const getStocks = async (req: Request, res: Response) => {
   try {
@@ -43,6 +44,46 @@ const getStocks = async (req: Request, res: Response) => {
   }
 };
 
+const addStockToWatchList = async (req: Request, res: Response) => {
+  try {
+    const { stockId } = req.body;
+    const stock = await Stock.findById(stockId);
+    if (!stock)
+      return res
+        .status(404)
+        .json({ status: 'error', message: 'Stock not found' });
+
+    let watchList = await WatchList.findOne({ userId: req.userId });
+
+    if (watchList) {
+      if (watchList.stocks.includes(stockId))
+        return res.status(500).json({
+          status: 'fail',
+          message: 'Stock is already added to user watch list',
+        });
+
+      watchList = await WatchList.findOneAndUpdate(
+        { userId: req.userId },
+        { $addToSet: { stocks: stockId } },
+        { new: true },
+      );
+    } else {
+      watchList = await WatchList.create({
+        userId: req.userId,
+        stocks: [stockId],
+      });
+    }
+
+    res
+      .status(200)
+      .json({ status: 'success', message: 'Stock Added successfully' });
+  } catch (error) {
+    console.log('Error 💥: ', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 export default {
   getStocks,
+  addStockToWatchList,
 };
