@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { SignUpInputsType } from '../pages/SignUp';
 import { LoginInputsType } from '../pages/Login';
-import { IUser } from '../context/AuthContext';
+import { IUser, useAuthContext } from '../context/AuthContext';
 
 const API_BASE_URL = 'http://localhost:5050/api/v1/' + 'users';
 
@@ -12,6 +12,7 @@ interface IResponse {
 }
 
 export const useSignUpUser = () => {
+  const { showToast } = useAuthContext();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const signUpUserRequest = async (data: SignUpInputsType) => {
@@ -31,11 +32,12 @@ export const useSignUpUser = () => {
     mutationKey: ['signUpUser'],
     mutationFn: signUpUserRequest,
     onSuccess: async () => {
+      showToast({ message: 'Account added successfully', type: 'SUCCESS' });
       await queryClient.invalidateQueries({ queryKey: ['verifyUser'] });
       navigate('/');
     },
     onError: (err: Error) => {
-      console.log(err.message);
+      showToast({ message: err.message, type: 'ERROR' });
     },
   });
 
@@ -46,6 +48,7 @@ export const useSignUpUser = () => {
 };
 
 export const useLoginUser = () => {
+  const { showToast } = useAuthContext();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const loginUserRequest = async (data: LoginInputsType) => {
@@ -65,11 +68,12 @@ export const useLoginUser = () => {
     mutationKey: ['loginUser'],
     mutationFn: loginUserRequest,
     onSuccess: async () => {
+      showToast({ message: 'User logged in successfully!', type: 'SUCCESS' });
       await queryClient.invalidateQueries({ queryKey: ['verifyUser'] });
       navigate('/');
     },
     onError: (err: Error) => {
-      console.log(err.message);
+      showToast({ message: err.message, type: 'ERROR' });
     },
   });
 
