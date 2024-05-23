@@ -83,7 +83,20 @@ const addStockToWatchList = async (req: Request, res: Response) => {
   }
 };
 
+const getWatchList = async (req: Request, res: Response) => {
+  try {
+    const watchList = await WatchList.findOne({ userId: req.userId }).populate(
+      'stocks',
+    );
+    res.status(200).json({ status: 'Success', data: watchList });
+  } catch (error) {
+    console.log('Error 💥: ', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 export default {
   getStocks,
   addStockToWatchList,
+  getWatchList,
 };
