@@ -29,7 +29,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const AuthContextProvider = ({ children }: Props) => {
   const [toast, setToast] = useState<ToastMessage | undefined>(undefined);
   const user = useVerifyUser();
-  console.log('DATA: ', user);
 
   const value = {
     user,
