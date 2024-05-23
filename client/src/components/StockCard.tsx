@@ -1,13 +1,21 @@
-import { IStock } from '../api/stocks.api';
+import { Link } from 'react-router-dom';
+import { IStock, useAddStockToWatchList } from '../api/stocks.api';
+import { useAuthContext } from '../context/AuthContext';
 
 interface Props {
   stock: IStock;
 }
 
 const StockCard = ({ stock }: Props) => {
+  const { AddStockToWatchList } = useAddStockToWatchList();
+  const { isLoggedIn } = useAuthContext();
   const getRandomColor = () => {
     const colors = ['text-[#FF0000]', 'text-[#00FF00]']; // Red and Green
     return colors[Math.floor(Math.random() * colors.length)];
+  };
+
+  const handleStockAddToWatchList = (id: string) => {
+    AddStockToWatchList(stock._id);
   };
 
   return (
@@ -18,9 +26,18 @@ const StockCard = ({ stock }: Props) => {
       <p className={`font-bold text-2xl ${getRandomColor()}`}>
         {stock.initial_price.toString()}
       </p>
-      <button className="bg-green-600 text-white font-bold py-2 px-5 rounded-md">
-        Add to My Watchlist
-      </button>
+      {isLoggedIn ? (
+        <button
+          className="bg-green-600 text-white font-bold py-2 px-5 rounded-md"
+          onClick={() => handleStockAddToWatchList(stock._id)}
+        >
+          Add to My Watch list
+        </button>
+      ) : (
+        <Link to="/auth/login" className="text-sm underline">
+          Login to add to watch list
+        </Link>
+      )}
     </div>
   );
 };

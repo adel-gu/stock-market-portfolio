@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import useGetStocks from '../api/stocks.api';
+import { useGetStocks } from '../api/stocks.api';
 import StockCard from '../components/StockCard';
 import Pagination from '../components/Pagination';
 
