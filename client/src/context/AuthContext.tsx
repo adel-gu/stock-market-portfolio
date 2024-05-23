@@ -21,6 +21,7 @@ type ToastMessage = {
 type AuthContextType = {
   user: IUser | undefined;
   isLoggedIn: boolean;
+  isAuthLoading: boolean;
   showToast: (toastMessage: ToastMessage) => void;
 };
 
@@ -28,11 +29,12 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AuthContextProvider = ({ children }: Props) => {
   const [toast, setToast] = useState<ToastMessage | undefined>(undefined);
-  const user = useVerifyUser();
+  const { user, isAuthLoading } = useVerifyUser();
 
   const value = {
     user,
     isLoggedIn: !!user,
+    isAuthLoading,
     showToast: (toastMessage: ToastMessage) => {
       setToast(toastMessage);
     },

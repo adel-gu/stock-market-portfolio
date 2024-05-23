@@ -7,7 +7,7 @@ interface Props {
 }
 
 const StockCard = ({ stock }: Props) => {
-  const { AddStockToWatchList } = useAddStockToWatchList();
+  const { AddStockToWatchList, isPending } = useAddStockToWatchList();
   const { isLoggedIn } = useAuthContext();
   const getRandomColor = () => {
     const colors = ['text-[#FF0000]', 'text-[#00FF00]']; // Red and Green
@@ -15,7 +15,7 @@ const StockCard = ({ stock }: Props) => {
   };
 
   const handleStockAddToWatchList = (id: string) => {
-    AddStockToWatchList(stock._id);
+    AddStockToWatchList(id);
   };
 
   return (
@@ -30,6 +30,7 @@ const StockCard = ({ stock }: Props) => {
         <button
           className="bg-green-600 text-white font-bold py-2 px-5 rounded-md"
           onClick={() => handleStockAddToWatchList(stock._id)}
+          disabled={isPending}
         >
           Add to My Watch list
         </button>

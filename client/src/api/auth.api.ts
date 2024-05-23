@@ -83,7 +83,39 @@ export const useLoginUser = () => {
   };
 };
 
-export const useVerifyUser = (): IUser | undefined => {
+export const useLogOutUser = () => {
+  const { showToast } = useAuthContext();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const logOutUserRequest = async () => {
+    const response = await fetch(`${API_BASE_URL}/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    if (!response.ok) throw new Error('Error signing up user');
+  };
+
+  const { mutateAsync: logOutUser, isPending } = useMutation({
+    mutationKey: ['loginUser'],
+    mutationFn: logOutUserRequest,
+    onSuccess: async () => {
+      showToast({ message: 'User logged Out!', type: 'SUCCESS' });
+      await queryClient.invalidateQueries({ queryKey: ['verifyUser'] });
+      navigate('/');
+    },
+    onError: (err: Error) => {
+      showToast({ message: err.message, type: 'ERROR' });
+    },
+  });
+
+  return {
+    isPending,
+    logOutUser,
+  };
+};
+
+export const useVerifyUser = () => {
   const verifyUserRequest = async (): Promise<IResponse | undefined> => {
     const response = await fetch(`${API_BASE_URL}/get-current-user`, {
       credentials: 'include',
@@ -93,7 +125,7 @@ export const useVerifyUser = (): IUser | undefined => {
     return await response.json();
   };
 
-  const { data } = useQuery({
+  const { data, isLoading: isAuthLoading } = useQuery({
     queryKey: ['verifyUser'],
     queryFn: verifyUserRequest,
     retry: false,
@@ -101,5 +133,5 @@ export const useVerifyUser = (): IUser | undefined => {
 
   const user = data?.data;
 
-  return user;
+  return { user, isAuthLoading };
 };

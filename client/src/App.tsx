@@ -7,6 +7,7 @@ import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import AuthContextProvider from './context/AuthContext';
 import AuthLayout from './layouts/AuthLayout';
+import WatchList from './pages/WatchList';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: 'watch-list',
+        element: <WatchList />,
       },
     ],
   },

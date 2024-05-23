@@ -21,6 +21,13 @@ interface IResponse {
   data: IData;
 }
 
+interface IWatchListResponse {
+  status: string;
+  data: {
+    stocks: IStock[];
+  };
+}
+
 const API_BASE_URL = 'http://localhost:5050/api/v1/' + 'stocks';
 
 export const useGetStocks = (
@@ -63,7 +70,7 @@ export const useAddStockToWatchList = () => {
     return response.json();
   };
 
-  const { mutateAsync: AddStockToWatchList } = useMutation({
+  const { mutateAsync: AddStockToWatchList, isPending } = useMutation({
     mutationKey: ['addStockToWatchList'],
     mutationFn: AddStockToWatchListRequest,
     onSuccess: () => {
@@ -80,5 +87,29 @@ export const useAddStockToWatchList = () => {
     },
   });
 
-  return { AddStockToWatchList };
+  return { AddStockToWatchList, isPending };
+};
+
+export const useGetWatchList = () => {
+  const getWatchListRequest = async (): Promise<IWatchListResponse> => {
+    const response = await fetch(`${API_BASE_URL}/watch-list`, {
+      credentials: 'include',
+    });
+
+    if (!response.ok) throw new Error('Error fetching all stocks');
+
+    return response.json();
+  };
+
+  const { data, isLoading: isGetWatchListLoading } = useQuery({
+    queryKey: ['getWatchList'],
+    queryFn: () => getWatchListRequest(),
+  });
+
+  let stocks: IStock[];
+
+  if (!data) stocks = [];
+  else stocks = data.data.stocks;
+
+  return { stocks, isGetWatchListLoading };
 };

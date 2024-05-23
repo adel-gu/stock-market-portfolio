@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
+import { useLogOutUser } from '../api/auth.api';
 
 const Header = () => {
   const { isLoggedIn } = useAuthContext();
+  const { isPending, logOutUser } = useLogOutUser();
   return (
     <div className="bg-blue-600">
       <div className="container mx-auto text-white">
@@ -19,7 +21,11 @@ const Header = () => {
           </div>
           {/* Desktop */}
           {isLoggedIn ? (
-            <button className="bg-white text-blue-600 font-bold py-2 px-5 rounded-md">
+            <button
+              className="bg-white text-blue-600 font-bold py-2 px-5 rounded-md"
+              onClick={() => logOutUser()}
+              disabled={isPending}
+            >
               Log Out
             </button>
           ) : (
