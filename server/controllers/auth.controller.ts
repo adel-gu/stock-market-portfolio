@@ -61,6 +61,16 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
+const logout = async (req: Request, res: Response) => {
+  try {
+    res.clearCookie('auth_token');
+    res.sendStatus(200);
+  } catch (error) {
+    console.log('Error 💥: ', error);
+    res.status(500).json({ message: error });
+  }
+};
+
 const protect = async (req: Request, res: Response, next: NextFunction) => {
   // 1. get token
   const token = req.cookies['auth_token'];
@@ -114,4 +124,5 @@ export default {
   login,
   protect,
   getLoggedUser,
+  logout,
 };

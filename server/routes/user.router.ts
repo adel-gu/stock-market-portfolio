@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.route('/signup').post(authController.signup);
 router.route('/login').post(authController.login);
-router
-  .route('/get-current-user')
-  .get(authController.protect, authController.getLoggedUser);
+router.use(authController.protect);
+router.route('/get-current-user').get(authController.getLoggedUser);
+router.route('/logout').post(authController.logout);
 
 export default router;

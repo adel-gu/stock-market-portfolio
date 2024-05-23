@@ -48,7 +48,7 @@ export const useSignUpUser = () => {
 };
 
 export const useLoginUser = () => {
-  const { showToast } = useAuthContext();
+  const { showToast, isLoggedIn } = useAuthContext();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const loginUserRequest = async (data: LoginInputsType) => {
@@ -80,6 +80,38 @@ export const useLoginUser = () => {
   return {
     isPending,
     loginUser,
+  };
+};
+
+export const useLogOutUser = () => {
+  const { showToast } = useAuthContext();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const logOutUserRequest = async () => {
+    const response = await fetch(`${API_BASE_URL}/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    if (!response.ok) throw new Error('Error signing up user');
+  };
+
+  const { mutateAsync: logOutUser, isPending } = useMutation({
+    mutationKey: ['loginUser'],
+    mutationFn: logOutUserRequest,
+    onSuccess: async () => {
+      showToast({ message: 'User logged Out!', type: 'SUCCESS' });
+      await queryClient.invalidateQueries({ queryKey: ['verifyUser'] });
+      navigate('/');
+    },
+    onError: (err: Error) => {
+      showToast({ message: err.message, type: 'ERROR' });
+    },
+  });
+
+  return {
+    isPending,
+    logOutUser,
   };
 };
 

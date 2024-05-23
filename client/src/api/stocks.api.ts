@@ -70,7 +70,7 @@ export const useAddStockToWatchList = () => {
     return response.json();
   };
 
-  const { mutateAsync: AddStockToWatchList } = useMutation({
+  const { mutateAsync: AddStockToWatchList, isPending } = useMutation({
     mutationKey: ['addStockToWatchList'],
     mutationFn: AddStockToWatchListRequest,
     onSuccess: () => {
@@ -87,7 +87,7 @@ export const useAddStockToWatchList = () => {
     },
   });
 
-  return { AddStockToWatchList };
+  return { AddStockToWatchList, isPending };
 };
 
 export const useGetWatchList = () => {
