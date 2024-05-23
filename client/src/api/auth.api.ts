@@ -48,7 +48,7 @@ export const useSignUpUser = () => {
 };
 
 export const useLoginUser = () => {
-  const { showToast, isLoggedIn } = useAuthContext();
+  const { showToast } = useAuthContext();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const loginUserRequest = async (data: LoginInputsType) => {
