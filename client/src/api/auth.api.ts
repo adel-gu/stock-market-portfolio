@@ -83,7 +83,7 @@ export const useLoginUser = () => {
   };
 };
 
-export const useVerifyUser = (): IUser | undefined => {
+export const useVerifyUser = () => {
   const verifyUserRequest = async (): Promise<IResponse | undefined> => {
     const response = await fetch(`${API_BASE_URL}/get-current-user`, {
       credentials: 'include',
@@ -93,7 +93,7 @@ export const useVerifyUser = (): IUser | undefined => {
     return await response.json();
   };
 
-  const { data } = useQuery({
+  const { data, isLoading: isAuthLoading } = useQuery({
     queryKey: ['verifyUser'],
     queryFn: verifyUserRequest,
     retry: false,
@@ -101,5 +101,5 @@ export const useVerifyUser = (): IUser | undefined => {
 
   const user = data?.data;
 
-  return user;
+  return { user, isAuthLoading };
 };
