@@ -5,13 +5,12 @@ import { useEffect } from 'react';
 const AuthLayout = () => {
   const navigate = useNavigate();
   const { isLoggedIn, isAuthLoading } = useAuthContext();
-  if (isLoggedIn) return <Navigate to="/" />;
 
   if (isAuthLoading) return <span>Loading...</span>;
 
   useEffect(() => {
     if (!isAuthLoading && !isLoggedIn) navigate('/login', { replace: true });
-  }, [isLoggedIn]);
+  }, [isLoggedIn, isAuthLoading]);
 
   if (isLoggedIn)
     return (

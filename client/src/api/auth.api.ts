@@ -101,7 +101,7 @@ export const useLogOutUser = () => {
     mutationFn: logOutUserRequest,
     onSuccess: async () => {
       showToast({ message: 'User logged Out!', type: 'SUCCESS' });
-      await queryClient.invalidateQueries({ queryKey: ['verifyUser'] });
+      await queryClient.setQueryData(['verifyUser'], null);
       navigate('/');
     },
     onError: (err: Error) => {
