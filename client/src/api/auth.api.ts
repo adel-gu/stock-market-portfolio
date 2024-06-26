@@ -128,7 +128,6 @@ export const useVerifyUser = () => {
   const { data, isLoading: isAuthLoading } = useQuery({
     queryKey: ['verifyUser'],
     queryFn: verifyUserRequest,
-    retry: false,
   });
 
   const user = data?.data;

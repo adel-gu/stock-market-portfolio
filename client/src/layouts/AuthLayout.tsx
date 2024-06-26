@@ -1,13 +1,23 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
+import { useEffect } from 'react';
 
 const AuthLayout = () => {
-  const { isLoggedIn } = useAuthContext();
+  const navigate = useNavigate();
+  const { isLoggedIn, isAuthLoading } = useAuthContext();
   if (isLoggedIn) return <Navigate to="/" />;
-  return (
-    <div className="container mx-auto">
-      <Outlet />
-    </div>
-  );
+
+  if (isAuthLoading) return <span>Loading...</span>;
+
+  useEffect(() => {
+    if (!isAuthLoading && !isLoggedIn) navigate('/login', { replace: true });
+  }, [isLoggedIn]);
+
+  if (isLoggedIn)
+    return (
+      <div className="container mx-auto">
+        <Outlet />
+      </div>
+    );
 };
 export default AuthLayout;
